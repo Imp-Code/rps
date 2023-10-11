@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Rock Paper Scissors</title>
+    <style>
+        body {
+            text-align: center;
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+        }
+        h1 {
+            color: #333;
+        }
+        #result {
+            font-size: 24px;
+            margin: 20px;
+            color: #333;
+        }
+        #choices {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+        .choice {
+            cursor: pointer;
+            padding: 10px 20px;
+            font-size: 18px;
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+        }
+        .choice:hover {
+            background-color: #2980b9;
+        }
+        #wins {
+            font-size: 18px;
+            margin-top: 20px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <h1>Rock, Paper, Scissors</h1>
+    <p>Make your choice:</p>
+    <div id="choices">
+        <button class="choice" id="rock">Rock</button>
+        <button class="choice" id="paper">Paper</button>
+        <button class="choice" id="scissors">Scissors</button>
+    </div>
+    <p id="result"></p>
+    <p id="wins">Wins: <span id="winCount">0</span></p>
+
+    <script>
+        const choices = ["rock", "paper", "scissors"];
+
+        const computerChoice = () => choices[Math.floor(Math.random() * 3)];
+
+        const determineWinner = (playerChoice, computerChoice) => {
+            if (playerChoice === computerChoice) {
+                return "It's a tie!";
+            } else if (
+                (playerChoice === "rock" && computerChoice === "scissors") ||
+                (playerChoice === "paper" && computerChoice === "rock") ||
+                (playerChoice === "scissors" && computerChoice === "paper")
+            ) {
+                return "You win!";
+            } else {
+                return "Computer wins!";
+            }
+        };
+
+        const updateResult = (playerChoice) => {
+            const compChoice = computerChoice();
+            const result = determineWinner(playerChoice, compChoice);
+            document.getElementById("result").textContent = `You chose ${playerChoice}. Computer chose ${compChoice}. ${result}`;
+            if (result === "You win!") {
+                updateWins();
+            }
+        };
+
+        const updateWins = () => {
+            let wins = parseInt(localStorage.getItem("Wins")) || 0;
+            wins++;
+            localStorage.setItem("Wins", wins);
+            document.getElementById("winCount").textContent = wins;
+        };
+
+        const choicesButtons = document.querySelectorAll(".choice");
+        choicesButtons.forEach((button) => {
+            button.addEventListener("click", () => {
+                updateResult(button.id);
+            });
+        });
+
+        // Initialize the wins count
+        document.getElementById("winCount").textContent = localStorage.getItem("Wins") || 0;
+    </script>
+</body>
+</html>
